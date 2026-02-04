@@ -31,3 +31,75 @@ add_action('pre_get_posts', function ($q) {
     }
   }
 });
+
+/*--- AJAX SEARCH ---*/
+
+/**
+ * Obsługa wyszukiwania produktów przez AJAX dla WooCommerce.
+ */
+add_action('wp_ajax_search_products', 'App\handle_ajax_search_products');
+add_action('wp_ajax_nopriv_search_products', 'App\handle_ajax_search_products');
+
+function handle_ajax_search_products() {
+    $search_query = sanitize_text_field($_REQUEST['s'] ?? '');
+
+    if (empty($search_query)) {
+        wp_send_json_error('Empty search query');
+        return;
+    }
+
+    $args = [
+        'post_type' => 'product',
+        'posts_per_page' => 5,
+        's' => $search_query,
+        'post_status' => 'publish',
+    ];
+
+    $products_query = new \WP_Query($args);
+
+    $results = [];
+
+    if ($products_query->have_posts()) {
+        while ($products_query->have_posts()) {
+            $products_query->the_post();
+            
+            $product = wc_get_product(get_the_ID());
+            
+            if (!$product) {
+                continue;
+            }
+            
+            $image_id = $product->get_image_id();
+            $image_url = wp_get_attachment_image_url($image_id, 'thumbnail');
+
+            $results[] = [
+                'id' => get_the_ID(),
+                'title' => get_the_title(),
+                'url' => get_permalink(),
+                'image' => $image_url ? $image_url : wc_placeholder_img_src(),
+            ];
+        }
+    }
+
+    wp_reset_postdata();
+
+    wp_send_json_success($results);
+}
+
+/**
+ * Aktualizacja licznika koszyka przez AJAX
+ */
+add_filter('woocommerce_add_to_cart_fragments', function($fragments) {
+    $count = WC()->cart->get_cart_contents_count();
+    
+    ob_start();
+    if ($count > 0) {
+        ?>
+        <span class="cart-count absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+            <?php echo $count; ?>
+        </span>
+        <?php
+    }
+    $fragments['.cart-count'] = ob_get_clean();
+    return $fragments;
+});

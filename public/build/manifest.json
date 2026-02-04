@@ -3,8 +3,8 @@
     "file": "assets/pagination-BmgjDa1V.css",
     "src": "_pagination-BmgjDa1V.css"
   },
-  "_pagination-CHjA978h.js": {
-    "file": "assets/pagination-CHjA978h.js",
+  "_pagination-VXllx3Wq.js": {
+    "file": "assets/pagination-VXllx3Wq.js",
     "name": "pagination",
     "imports": [
       "resources/js/app.js"
@@ -22,7 +22,7 @@
     "src": "editor.deps.json"
   },
   "resources/css/app.css": {
-    "file": "assets/app-C0uqPGwH.css",
+    "file": "assets/app-C76qpzLh.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -31,7 +31,7 @@
     ]
   },
   "resources/css/editor.css": {
-    "file": "assets/editor-BeLUYfax.css",
+    "file": "assets/editor-CaqWz8Rw.css",
     "src": "resources/css/editor.css",
     "isEntry": true,
     "name": "editor",
@@ -76,7 +76,7 @@
     "src": "resources/images/ring-mask.svg"
   },
   "resources/js/app.js": {
-    "file": "assets/app-PxtnkID5.js",
+    "file": "assets/app-B7CI3wX3.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -89,13 +89,13 @@
     ]
   },
   "resources/js/blocks/help.js": {
-    "file": "assets/help-CqgP99-S.js",
+    "file": "assets/help-DCVvuxzX.js",
     "name": "help",
     "src": "resources/js/blocks/help.js",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js",
-      "_pagination-CHjA978h.js"
+      "_pagination-VXllx3Wq.js"
     ],
     "css": [
       "assets/help-BoYVoAWi.css",
@@ -103,7 +103,7 @@
     ]
   },
   "resources/js/blocks/places.js": {
-    "file": "assets/places-B3rHdHHF.js",
+    "file": "assets/places-oCmAvWgH.js",
     "name": "places",
     "src": "resources/js/blocks/places.js",
     "isDynamicEntry": true,
@@ -112,20 +112,20 @@
     ]
   },
   "resources/js/blocks/reviews.js": {
-    "file": "assets/reviews-Bn6aD-Qm.js",
+    "file": "assets/reviews-Cu7SS8RE.js",
     "name": "reviews",
     "src": "resources/js/blocks/reviews.js",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js",
-      "_pagination-CHjA978h.js"
+      "_pagination-VXllx3Wq.js"
     ],
     "css": [
       "assets/swiper-DHBATib1.css"
     ]
   },
   "resources/js/blocks/tabs.js": {
-    "file": "assets/tabs-0DpoC1b6.js",
+    "file": "assets/tabs-D_B1Rdkm.js",
     "name": "tabs",
     "src": "resources/js/blocks/tabs.js",
     "isDynamicEntry": true,
@@ -138,13 +138,13 @@
     ]
   },
   "resources/js/blocks/team.js": {
-    "file": "assets/team-8w5mXx2I.js",
+    "file": "assets/team-1s_S08Ik.js",
     "name": "team",
     "src": "resources/js/blocks/team.js",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js",
-      "_pagination-CHjA978h.js"
+      "_pagination-VXllx3Wq.js"
     ],
     "css": [
       "assets/swiper-DHBATib1.css"

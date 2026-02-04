@@ -29,8 +29,46 @@ import './blocks/calc.js';
 import './blocks/category-slider.js';
 
 /*--- INICJALIZACJA BIBLIOTEK ---*/
-// Uruchom Alpine.js
+
+// Ustaw Alpine.js na obiekcie window, aby było dostępne globalnie
 window.Alpine = Alpine;
+
+// Zarejestruj komponent wyszukiwarki dla Alpine.js
+// To MUSI być przed Alpine.start()
+document.addEventListener('alpine:init', () => {
+  Alpine.data('productSearch', () => ({
+    searchQuery: '',
+    searchResults: [],
+    searchProducts() {
+      if (this.searchQuery.length < 2) { // Zmniejszyłem próg do 2 znaków
+        this.searchResults = [];
+        return;
+      }
+
+      // Używamy obiektu URLSearchParams dla bezpieczeństwa i czytelności
+      const params = new URLSearchParams({
+        action: 'search_products',
+        s: this.searchQuery,
+      });
+
+      fetch(`/wp-admin/admin-ajax.php?${params.toString()}`)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            this.searchResults = data.data;
+          } else {
+            this.searchResults = [];
+          }
+        })
+        .catch(error => {
+            console.error('Błąd wyszukiwania AJAX:', error);
+            this.searchResults = [];
+        });
+    },
+  }));
+});
+
+// Uruchom Alpine.js (tylko raz!)
 Alpine.start();
 
 /*--- SKRYPTY URUCHAMIANE PO ZAŁADOWANIU STRONY ---*/
@@ -153,3 +191,7 @@ document.addEventListener('DOMContentLoaded', function () {
     },
   });
 });
+
+/*--- SEARCH ---*/
+
+

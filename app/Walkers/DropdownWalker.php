@@ -29,14 +29,10 @@ class DropdownWalker extends Walker_Nav_Menu
             // Logika Alpine.js do otwierania/zamykania przy hover zostaje w <li>
             $output .= '<li x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false" class="relative ' . esc_attr(implode(' ', $item->classes)) . '">';
             
-            // ### POCZĄTEK ZMIANY ###
-            // Zamiast <button> używamy <a> z linkiem do strony nadrzędnej.
-            // Usunęliśmy `@click`, aby kliknięcie powodowało standardową nawigację.
             $output .= '<a href="' . esc_attr($item->url) . '" class="inline-flex items-center gap-x-1 text-sm font-medium hover:text-indigo-600">';
-            $output .= esc_html($item->title);
+            $output .= apply_filters('the_title', $item->title, $item->ID);
             $output .= '<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" /></svg>';
             $output .= '</a>';
-            // ### KONIEC ZMIANY ###
 
         }
         // Case 2: Pozostałe elementy (zwykłe linki na górze lub linki wewnątrz dropdownu)
@@ -51,7 +47,7 @@ class DropdownWalker extends Walker_Nav_Menu
             }
 
             $output .= '<a href="' . esc_attr($item->url) . '" class="' . esc_attr($link_classes) . '">';
-            $output .= esc_html($item->title);
+            $output .= apply_filters('the_title', $item->title, $item->ID);
             $output .= '</a>';
         }
     }

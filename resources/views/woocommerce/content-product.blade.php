@@ -4,22 +4,27 @@ defined('ABSPATH') || exit;
 
 @php global $product; @endphp
 
-<li {!! wc_product_class(' border-left-p bg-white block !px-10 !py-14', $product) !!}>
-	<!--<figure class="woocommerce-product-figure relative">
-		@if($product && $product->is_on_sale())
-		<span class="onsale">Promocja!</span>
-		@endif
+<li class="bg-white b-radius relative !p-10">
 
-		  <a href="{{ get_permalink() }}">
-      <img src="{{ get_the_post_thumbnail_url($product->get_id(), 'large') }}"
-           alt="{{ get_the_title() }}" class="img-m" />
-    </a>
-	</figure> -->
+	@if($product && $product->is_on_sale())
+	<span class="onsale">Promocja!</span>
+	@endif
+	<figure class="woocommerce-product-figure relative">
+		<a href="{{ get_permalink() }}">
+			<img src="{{ get_the_post_thumbnail_url($product->get_id(), '') }}"
+				alt="{{ get_the_title() }}" class="img-xs max-h-52 !object-contain" />
+		</a>
+	</figure>
 
-	<h6 class="woocommerce-loop-product__title">
-		<a href="{{ get_permalink() }}">{!! get_the_title() !!}</a>
-	</h6>
-
-	<a href="{{ get_permalink() }}" class="underline-btn mt-4">Zobacz produkty</a>
-	@php do_action('woocommerce_after_shop_loop_item_title') @endphp
+	<div class="flex flex-col">
+		<h5 class="woocommerce-loop-product__title !min-h-16">
+			<a class="block text-center" href="{{ get_permalink() }}">{!! get_the_title() !!}</a>
+		</h5>
+		<div class="text-center">
+			@php do_action('woocommerce_after_shop_loop_item_title') @endphp
+		</div>
+		<div class="mt-6 text-center">
+			@php do_action('woocommerce_after_shop_loop_item') @endphp
+		</div>
+	</div>
 </li>
