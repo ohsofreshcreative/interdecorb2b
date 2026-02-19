@@ -942,7 +942,7 @@ h6,
 	z-index: 49;
 	transition: all 0.3s;
 	transition-delay: 0s;
-	box-shadow: 0 3px 5px rgba(37, 6, 6, 0.2) !important;
+	box-shadow: 0 3px 5px rgba(30, 30, 35, 0.2) !important;
 
 	.contact__btn {
 		background-color: var(--color-primary);
@@ -976,8 +976,8 @@ h6,
 }
 
 .fixed-top.scrollDown {
-	background-color: #fff !important;
-	box-shadow: 0 3px 5px rgba(27, 106, 23, 0.2) !important;
+/* 	background-color: #fff !important; */
+	box-shadow: 0 3px 5px rgba(30, 30, 35, 0.2) !important;
 	margin-top: 0 !important;
 }
 
@@ -1335,13 +1335,19 @@ article.post:hover {
 
 /*--- !WOOCOMMERCE ---*/
 
+.woocommerce .quantity input[type=number]::-webkit-inner-spin-button,
+.woocommerce .quantity input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Dla Firefox */
+.woocommerce .quantity input[type=number] {
+  -moz-appearance: textfield;
+}
+
 /*--- !SHOP PAGE ---*/
 
-.archive.woocommerce-shop.woocommerce.woocommerce-page {
-	h1 {
-		display: none !important;
-	}
-}
 
 .woocommerce .products ul::after,
 .woocommerce .products ul::before,

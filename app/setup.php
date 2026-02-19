@@ -398,8 +398,7 @@ add_action('admin_footer', function () {
   <?php
 });
 
-
-
+/*--- REDIRECT TAXONOMY TO PAGE ---*/
 
 add_action('template_redirect', function () {
     // Sprawdź, czy jesteśmy na stronie archiwum JAKIEJKOLWIEK taksonomii
@@ -424,7 +423,7 @@ add_action('template_redirect', function () {
 });
 
 // CUSTOM POST TYPE BRANŻE
-		add_action('init', function () {
+	/* 	add_action('init', function () {
 			register_post_type('offer', [
 				'label' => 'Oferta',
 				'public' => true,
@@ -435,9 +434,9 @@ add_action('template_redirect', function () {
 				'taxonomies' => ['category'],
 				'menu_icon' => 'dashicons-list-view',
 			]);
-		});
+		}); */
 
-		// CUSTOM POST TYPE POMAGAMY W 
+	/* 	// CUSTOM POST TYPE POMAGAMY W 
 		add_action('init', function () {
 			register_post_type('help', [
 				'label' => 'Pomagamy w',
@@ -449,9 +448,9 @@ add_action('template_redirect', function () {
 				'taxonomies' => ['category'],
 				'menu_icon' => 'dashicons-open-folder',
 			]);
-		});
+		}); */
 
-		add_action('init', function () {
+	/* 	add_action('init', function () {
 			// 1. NAJPIERW REJESTRUJEMY NOWĄ, NIESTANDARDOWĄ TAKSONOMIĘ
 			register_taxonomy('team_category', ['team'], [
 				'label' => 'Kategorie Zespołu', // Nazwa ogólna
@@ -490,4 +489,72 @@ add_action('template_redirect', function () {
 				'taxonomies' => ['team_category'],
 				'menu_icon' => 'dashicons-admin-users',
 			]);
-		});
+		}); */
+
+
+		/**
+ * Obsługa zapytań AJAX do filtrowania produktów.
+ * WERSJA Z DEBUGOWANIEM WEWNĄTRZ KODU.
+ */
+function filter_products_by_category() {
+    try {
+        if (!check_ajax_referer('filter_products_nonce', 'security', false)) {
+            wp_send_json_error('Invalid nonce', 403);
+            die();
+        }
+
+        $category_id = isset($_POST['category_id']) ? sanitize_text_field($_POST['category_id']) : 'all';
+        $paged = isset($_POST['paged']) ? intval($_POST['paged']) : 1;
+        $posts_per_page = 10;
+
+        $args = [
+            'post_type' => 'product',
+            'posts_per_page' => $posts_per_page,
+            'paged' => $paged,
+            'post_status' => 'publish',
+        ];
+
+        if ($category_id !== 'all' && is_numeric($category_id)) {
+            $args['tax_query'] = [
+                [
+                    'taxonomy' => 'product_cat',
+                    'field' => 'term_id',
+                    'terms' => (int)$category_id,
+                ],
+            ];
+        }
+
+       $product_query = new \WP_Query($args);
+        $html_output = '';
+
+        if ($product_query->have_posts()) {
+            $html_output .= '<ul class="products flex flex-col gap-6 mt-6">';
+            while ($product_query->have_posts()) {
+                $product_query->the_post();
+                $product = wc_get_product(get_the_ID());
+                if (!$product) continue;
+
+                $html_output .= \Roots\view('woocommerce.content-product', ['product' => $product])->render();
+            }
+            $html_output .= '</ul>';
+            // ... (reszta kodu pętli i paginacji)
+        } else {
+            $html_output = '<p class="woocommerce-info">' . __('No products were found matching your selection.', 'woocommerce') . '</p>';
+        }
+        
+        wp_reset_postdata();
+        wp_send_json_success(['html' => $html_output]);
+
+    } catch (Throwable $e) {
+        // JEŚLI WYSTĄPI BŁĄD KRYTYCZNY, ZŁAPIEMY GO TUTAJ
+        // i wyślemy jako odpowiedź JSON, zamiast powodować błąd 500.
+        wp_send_json_error([
+            'message' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+        ]);
+    }
+}
+
+add_action('wp_ajax_filter_products', __NAMESPACE__ . '\\filter_products_by_category');
+add_action('wp_ajax_nopriv_filter_products', __NAMESPACE__ . '\\filter_products_by_category');

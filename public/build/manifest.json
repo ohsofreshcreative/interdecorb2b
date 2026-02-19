@@ -3,8 +3,8 @@
     "file": "assets/pagination-BmgjDa1V.css",
     "src": "_pagination-BmgjDa1V.css"
   },
-  "_pagination-VXllx3Wq.js": {
-    "file": "assets/pagination-VXllx3Wq.js",
+  "_pagination-CteVdbAd.js": {
+    "file": "assets/pagination-CteVdbAd.js",
     "name": "pagination",
     "imports": [
       "resources/js/app.js"
@@ -22,7 +22,7 @@
     "src": "editor.deps.json"
   },
   "resources/css/app.css": {
-    "file": "assets/app-C76qpzLh.css",
+    "file": "assets/app-DgFbbn5s.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -31,7 +31,7 @@
     ]
   },
   "resources/css/editor.css": {
-    "file": "assets/editor-B6ZWdgR9.css",
+    "file": "assets/editor-Bn7MWnfp.css",
     "src": "resources/css/editor.css",
     "isEntry": true,
     "name": "editor",
@@ -76,7 +76,7 @@
     "src": "resources/images/ring-mask.svg"
   },
   "resources/js/app.js": {
-    "file": "assets/app-B7CI3wX3.js",
+    "file": "assets/app-CTnj-KX2.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -85,17 +85,18 @@
       "resources/js/blocks/team.js",
       "resources/js/blocks/reviews.js",
       "resources/js/blocks/places.js",
-      "resources/js/blocks/tabs.js"
+      "resources/js/blocks/tabs.js",
+      "resources/js/blocks/products.js"
     ]
   },
   "resources/js/blocks/help.js": {
-    "file": "assets/help-DCVvuxzX.js",
+    "file": "assets/help-C_IMzfIU.js",
     "name": "help",
     "src": "resources/js/blocks/help.js",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js",
-      "_pagination-VXllx3Wq.js"
+      "_pagination-CteVdbAd.js"
     ],
     "css": [
       "assets/help-BoYVoAWi.css",
@@ -103,7 +104,7 @@
     ]
   },
   "resources/js/blocks/places.js": {
-    "file": "assets/places-oCmAvWgH.js",
+    "file": "assets/places-D0q7cy4B.js",
     "name": "places",
     "src": "resources/js/blocks/places.js",
     "isDynamicEntry": true,
@@ -111,21 +112,27 @@
       "resources/js/app.js"
     ]
   },
+  "resources/js/blocks/products.js": {
+    "file": "assets/products-52jwWW_f.js",
+    "name": "products",
+    "src": "resources/js/blocks/products.js",
+    "isDynamicEntry": true
+  },
   "resources/js/blocks/reviews.js": {
-    "file": "assets/reviews-Cu7SS8RE.js",
+    "file": "assets/reviews-DsJM7tla.js",
     "name": "reviews",
     "src": "resources/js/blocks/reviews.js",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js",
-      "_pagination-VXllx3Wq.js"
+      "_pagination-CteVdbAd.js"
     ],
     "css": [
       "assets/swiper-DHBATib1.css"
     ]
   },
   "resources/js/blocks/tabs.js": {
-    "file": "assets/tabs-D_B1Rdkm.js",
+    "file": "assets/tabs-RV3omr5E.js",
     "name": "tabs",
     "src": "resources/js/blocks/tabs.js",
     "isDynamicEntry": true,
@@ -138,13 +145,13 @@
     ]
   },
   "resources/js/blocks/team.js": {
-    "file": "assets/team-1s_S08Ik.js",
+    "file": "assets/team-DyNEW1lU.js",
     "name": "team",
     "src": "resources/js/blocks/team.js",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js",
-      "_pagination-VXllx3Wq.js"
+      "_pagination-CteVdbAd.js"
     ],
     "css": [
       "assets/swiper-DHBATib1.css"

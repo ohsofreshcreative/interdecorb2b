@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (document.querySelector('.b-reviews')) import('./blocks/reviews');
   if (document.querySelector('.b-places')) import('./blocks/places');
   if (document.querySelector('.b-tabs')) import('./blocks/tabs');
+  if (document.querySelector('.b-products')) import('./blocks/products');
 });
 
 /*--- NOT USED ---*/
@@ -192,6 +193,66 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
-/*--- SEARCH ---*/
+/*--- ADD TO CART - QUANTITY ---*/
 
+function setupShopQuantityButtons() {
+  // Używamy delegacji zdarzeń, co jest bardziej wydajne i działa
+  // również dla produktów doładowanych przez AJAX ("Pokaż więcej").
+  document.body.addEventListener('click', function (e) {
+    // Sprawdzamy, czy kliknięty element to nasz przycisk '+' lub '-'
+    if (e.target.matches('.quantity-button')) {
+      e.preventDefault();
+      
+      const wrapper = e.target.closest('.quantity-wrapper');
+      if (!wrapper) return;
 
+      const quantityInput = wrapper.querySelector('.qty');
+      // Znajdujemy rodzica, który zawiera zarówno pole ilości, jak i przycisk koszyka
+      const productContainer = e.target.closest('li'); 
+      if (!productContainer || !quantityInput) return;
+      
+      const addToCartButton = productContainer.querySelector('.add_to_cart_button');
+
+      // Zmieniamy wartość w polu input
+      const oldValue = parseFloat(quantityInput.value) || 0;
+      const step = parseFloat(quantityInput.step || '1');
+      
+      let newValue;
+      if (e.target.matches('.quantity-plus')) {
+        newValue = oldValue + step;
+      } else {
+        newValue = oldValue - step;
+      }
+
+      // Sprawdzamy granice min/max
+      const min = parseFloat(quantityInput.min || '0');
+      if (newValue < min) {
+        newValue = min;
+      }
+
+      quantityInput.value = newValue;
+
+      // KLUCZOWA ZMIANA: Aktualizujemy atrybut 'data-quantity' na przycisku koszyka
+      if (addToCartButton) {
+        addToCartButton.setAttribute('data-quantity', newValue);
+      }
+    }
+  });
+
+  // Ta funkcja jest potrzebna, aby zaktualizować 'data-quantity'
+  // gdy ktoś wpisze ilość ręcznie i pole straci focus.
+  document.body.addEventListener('change', function(e) {
+    if (e.target.matches('.quantity .qty')) {
+      const productContainer = e.target.closest('li');
+      if (!productContainer) return;
+
+      const addToCartButton = productContainer.querySelector('.add_to_cart_button');
+      if (addToCartButton) {
+        addToCartButton.setAttribute('data-quantity', e.target.value);
+      }
+    }
+  });
+}
+
+// Uruchamiamy funkcję po załadowaniu strony
+document.addEventListener('DOMContentLoaded', setupShopQuantityButtons);

@@ -13,12 +13,12 @@ $sectionClass .= $nomt ? ' !mt-0' : '';
 	<div class="__wrapper c-main grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8 items-end relative z-20 py-30">
 		<div class="__content relative z-20 pt-20 pb-10 md:py-30">
 
-			<h1 data-gsap-element="header" class="text-white bg-bg-brand">
+			<h1 data-gsap-element="header" class="text-primary text-h3">
 				{{ $g_hero['title'] }}
 			</h1>
-			<div data-gsap-element="txt" class="text-xl md:text-2xl text-white mt-2 w-full md:w-2/3">
-				{!! $g_hero['txt'] !!}
-			</div>
+			 <h6 data-gsap-element="txt" class="font-header text-xl md:text-2xl text-white mt-2 w-full md:w-2/3">
+                {!! strip_tags($g_hero['txt']) !!}
+            </h6>
 			@if (!empty($g_hero['button1']))
 			<div class="inline-buttons m-btn">
 				<a data-gsap-element="button" class="second-btn left-btn"

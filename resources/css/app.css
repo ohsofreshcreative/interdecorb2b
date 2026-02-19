@@ -114,6 +114,7 @@
 
 /*-- USED ---*/
 @import '../css/blocks/hero.scss';
+@import '../css/blocks/duo.scss';
 
 /*-- NOT USED --*/
 @import '../css/blocks/help.scss';

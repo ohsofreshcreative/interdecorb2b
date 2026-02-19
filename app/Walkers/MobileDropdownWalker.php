@@ -32,7 +32,7 @@ class MobileDropdownWalker extends Walker_Nav_Menu
             
             // Link do strony nadrzędnej – zajmuje większość miejsca.
             $output .= '<a href="' . esc_attr($item->url) . '" class="flex-grow py-1 pr-4">';
-            $output .= apply_filters('the_title', $item->title, $item->ID);
+            $output .= esc_html($item->title);
             $output .= '</a>';
             
             // Osobny przycisk ze strzałką, który rozwija/zwija submenu.
@@ -48,7 +48,7 @@ class MobileDropdownWalker extends Walker_Nav_Menu
         else {
             $output .= '<li>';
             $output .= '<a href="' . esc_attr($item->url) . '" class="block py-1">';
-            $output .= apply_filters('the_title', $item->title, $item->ID);
+            $output .= esc_html($item->title);
             $output .= '</a>';
         }
     }
