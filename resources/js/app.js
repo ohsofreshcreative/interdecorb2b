@@ -9,6 +9,7 @@ import.meta.glob(['../images/**', '../fonts/**']);
 // Twoje niestandardowe moduły JS
 import './menubar.js';
 import './footer-accordion.js';
+import './archive-filter.js';
 
 /*--- USED ---*/
 
@@ -197,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function setupShopQuantityButtons() {
   // Używamy delegacji zdarzeń, co jest bardziej wydajne i działa
-  // również dla produktów doładowanych przez AJAX ("Pokaż więcej").
+  // również dla produktów doładowanych przez AJAX.
   document.body.addEventListener('click', function (e) {
     // Sprawdzamy, czy kliknięty element to nasz przycisk '+' lub '-'
     if (e.target.matches('.quantity-button')) {
@@ -207,11 +208,12 @@ function setupShopQuantityButtons() {
       if (!wrapper) return;
 
       const quantityInput = wrapper.querySelector('.qty');
-      // Znajdujemy rodzica, który zawiera zarówno pole ilości, jak i przycisk koszyka
-      const productContainer = e.target.closest('li'); 
+      // ZMIANA: Szukamy najbliższego formularza lub elementu 'li' jako kontenera.
+      const productContainer = e.target.closest('form.cart, li'); 
       if (!productContainer || !quantityInput) return;
       
-      const addToCartButton = productContainer.querySelector('.add_to_cart_button');
+      // ZMIANA: Przycisk "dodaj do koszyka" może być linkiem <a> lub przyciskiem <button>.
+      const addToCartButton = productContainer.querySelector('.add_to_cart_button, .single_add_to_cart_button');
 
       // Zmieniamy wartość w polu input
       const oldValue = parseFloat(quantityInput.value) || 0;
@@ -232,22 +234,23 @@ function setupShopQuantityButtons() {
 
       quantityInput.value = newValue;
 
-      // KLUCZOWA ZMIANA: Aktualizujemy atrybut 'data-quantity' na przycisku koszyka
-      if (addToCartButton) {
+      // Aktualizujemy atrybut 'data-quantity' na przycisku koszyka (dla AJAX)
+      if (addToCartButton && addToCartButton.hasAttribute('data-quantity')) {
         addToCartButton.setAttribute('data-quantity', newValue);
       }
     }
   });
 
   // Ta funkcja jest potrzebna, aby zaktualizować 'data-quantity'
-  // gdy ktoś wpisze ilość ręcznie i pole straci focus.
+  // gdy ktoś wpisze ilość ręcznie.
   document.body.addEventListener('change', function(e) {
     if (e.target.matches('.quantity .qty')) {
-      const productContainer = e.target.closest('li');
+      // ZMIANA: Szukamy najbliższego formularza lub elementu 'li' jako kontenera.
+      const productContainer = e.target.closest('form.cart, li');
       if (!productContainer) return;
 
-      const addToCartButton = productContainer.querySelector('.add_to_cart_button');
-      if (addToCartButton) {
+      const addToCartButton = productContainer.querySelector('.add_to_cart_button, .single_add_to_cart_button');
+      if (addToCartButton && addToCartButton.hasAttribute('data-quantity')) {
         addToCartButton.setAttribute('data-quantity', e.target.value);
       }
     }

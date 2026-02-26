@@ -1,7 +1,7 @@
 <li class="category-item">
 	<div class="flex items-center justify-between">
-		<button data-category-id="{{ $category->term_id }}" class="category-filter-btn flex-grow text-left p-2 rounded hover:bg-gray-100">
-			{{ $category->name }} <span class="text-sm text-gray-500">({{ $category->count }})</span>
+		<button data-category-id="{{ $category->term_id }}" class="category-filter-btn">
+			{{ $category->name }}
 		</button>
 		@if (!empty($category->children))
 		<button class="category-toggle-btn p-2 rounded hover:bg-gray-200">

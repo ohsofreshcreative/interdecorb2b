@@ -100,7 +100,7 @@ body {
 	--txt: "DM Sans", sans-serif;
 	--btns-font: "DM Sans", sans-serif;
 
-	--smt: 144px;
+	--smt: 104px;
 	--spt: 104px;
 	--smb: 104px;
 	--spb: 104px;
@@ -561,7 +561,7 @@ h5,
 h6,
 .text-h6 {
 	font-size: 24px !important;
-	line-height: 1.6rem;
+	line-height: 2rem;
 }
 
 .h7,
@@ -971,12 +971,12 @@ h6,
 }
 
 .fixed-top.scrollUp {
-	transform: translateY(-90px);
+	/* 	transform: translateY(-90px); */
 	transition: all 0.3s !important;
 }
 
 .fixed-top.scrollDown {
-/* 	background-color: #fff !important; */
+	/* 	background-color: #fff !important; */
 	box-shadow: 0 3px 5px rgba(30, 30, 35, 0.2) !important;
 	margin-top: 0 !important;
 }
@@ -1337,14 +1337,136 @@ article.post:hover {
 
 .woocommerce .quantity input[type=number]::-webkit-inner-spin-button,
 .woocommerce .quantity input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+	-webkit-appearance: none;
+	margin: 0;
 }
 
 /* Dla Firefox */
 .woocommerce .quantity input[type=number] {
-  -moz-appearance: textfield;
+	-moz-appearance: textfield;
+
 }
+
+.woocommerce .quantity .qty {
+	width: 44px;
+}
+
+/* Przyciski na stronie sklepu (pętla) - okrągłe z ikoną */
+.woocommerce a.button.add_to_cart_button,
+.woocommerce a.button.product_type_variable {
+	font-family: var(--btns-font);
+	font-size: var(--btns-fontsize);
+	font-weight: 400;
+	text-decoration: none;
+	white-space: nowrap;
+	cursor: pointer;
+	transition: all 0.2s ease-out;
+
+	/* Style z .btn-primary */
+	background-color: var(--color-primary);
+	border: 1px solid var(--color-primary);
+	color: #fff;
+
+	/* Styl okrągłego przycisku */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 50px;
+	/* Możesz dostosować rozmiar */
+	height: 50px;
+	/* Możesz dostosować rozmiar */
+	padding: 0;
+	border-radius: 50%;
+}
+
+.woocommerce a.button.add_to_cart_button:hover,
+.woocommerce a.button.product_type_variable:hover {
+	/* Style z .btn-primary:hover */
+	background-color: var(--color-primary-hover);
+	border-color: var(--color-primary-hover);
+	color: #fff;
+}
+
+/* Przycisk na stronie pojedynczego produktu - prostokątny z tekstem */
+.woocommerce button.button.single_add_to_cart_button {
+	font-family: var(--btns-font);
+	font-size: var(--btns-fontsize);
+	font-weight: 400;
+	border-radius: var(--btns-radius);
+	display: inline-block;
+	padding: var(--btns-padding);
+	width: max-content;
+	height: max-content;
+	text-decoration: none;
+	white-space: nowrap;
+	cursor: pointer;
+	transition: all 0.2s ease-out;
+	text-align: center;
+
+	/* Style z .btn-primary */
+	background-color: var(--color-primary);
+	border: 1px solid var(--color-primary);
+	color: #fff;
+}
+
+.woocommerce button.button.single_add_to_cart_button:hover {
+	/* Style z .btn-primary:hover */
+	background-color: var(--color-primary-hover);
+	border-color: var(--color-primary-hover);
+	color: #fff;
+}
+
+.woocommerce button.button.single_add_to_cart_button:hover {
+	/* Style z .btn-primary:hover */
+	background-color: var(--color-primary-hover);
+	border-color: var(--color-primary-hover);
+	color: #fff;
+}
+
+/* Styl dla nieaktywnego przycisku "Dodaj do koszyka" */
+.woocommerce button.button.single_add_to_cart_button.disabled,
+.woocommerce button.button.single_add_to_cart_button:disabled {
+	background-color: var(--color-primary-300);
+	border-color: var(--color-primary-300);
+	color: rgba(255, 255, 255, 0.7);
+	/* Lekko przezroczysty biały tekst dla lepszego wyglądu */
+	cursor: not-allowed;
+}
+
+/* 1. Ukrycie stanu "loading" (spinner i przyciemnienie) - pozostaje bez zmian */
+.woocommerce a.button.add_to_cart_button.loading,
+.woocommerce a.button.product_type_variable.loading {
+	opacity: 1 !important;
+	color: #fff !important;
+}
+
+.woocommerce a.button.add_to_cart_button.loading::after,
+.woocommerce a.button.product_type_variable.loading::after {
+	display: none;
+}
+
+/* 2. Ukrycie ikony SVG, gdy pojawi się klasa .added */
+.woocommerce a.button.add_to_cart_button.added svg {
+	display: none;
+}
+
+/* 3. Wyświetlenie i styl "ptaszka" (::after) */
+.woocommerce a.button.add_to_cart_button.added::after {
+	font-family: 'WooCommerce';
+	content: '\e017';
+	font-size: 14px;
+	display: inline-block;
+	text-align: center;
+	line-height: 50px;
+	width: 100%;
+	margin-left: 0 !important;
+}
+
+/* 4. Ukrycie linku "Zobacz koszyk", który pojawia się obok */
+.woocommerce a.added_to_cart {
+	display: none !important;
+}
+
 
 /*--- !SHOP PAGE ---*/
 
@@ -1390,6 +1512,10 @@ article.post:hover {
 
 /*--- !SINGLE PRODUCT ---*/
 .single-product {
+	.price bdi {
+		font-family: var(--header);
+	}
+
 	.shop-btn {
 		font-family: var(--btns-font);
 		font-size: var(--btns-fontsize);
@@ -1459,6 +1585,59 @@ article.post:hover {
 			color: #fff;
 		}
 	}
+
+	.woocommerce-product-details__short-description {
+		.__stock {
+			display: inline-flex;
+			align-items: center;
+			height: max-content;
+			color: var(--color-secondary) !important;
+
+			.stock.in-stock {
+				color: var(--color-secondary) !important;
+
+			}
+
+			.stock.out-of-stock {}
+
+			.stock.available-on-backorder {
+				color: var(--color-secondary) !important;
+
+			}
+		}
+	}
+
+	.__stock::before {
+		content: url('http://interdecorb2b.local/wp-content/uploads/2026/02/stock.svg');
+		margin-right: 8px;
+		position: relative;
+		top: 4px;
+		width: 32px;
+		width: 32px;
+		transition: all 0.2s ease-out;
+
+	}
+}
+
+.woocommerce #content div.product div.images,
+.woocommerce div.product div.images,
+.woocommerce-page #content div.product div.images,
+.woocommerce-page div.product div.images {
+	float: none;
+	width: 100%;
+}
+
+.woocommerce #content div.product div.summary,
+.woocommerce div.product div.summary,
+.woocommerce-page #content div.product div.summary,
+.woocommerce-page div.product div.summary {
+	float: none;
+	width: 100%;
+}
+
+.woocommerce div.product form.cart::after,
+.woocommerce div.product form.cart::before {
+	display: none;
 }
 
 /*--- !FOOTER ---*/
@@ -1499,18 +1678,19 @@ article.post:hover {
 
 .__widgets {
 	p {
-		color: var(--text-body);
+		color: #FFF;
 	}
 
 	a {
-		color: var(--text-body);
+		color: var(--color-primary-100);
 		transition: all 0.3s;
+		opacity: 0.9;
 	}
 
 	a:hover {
-		color: var(--text-body);
+		color: #FFF;
 		transition: all 0.3s;
-		opacity: 0.6;
+		opacity: 1;
 	}
 
 	ul.sub-menu {
@@ -1527,6 +1707,43 @@ article.post:hover {
 	}
 }
 
+.footer::before {
+	content: '';
+	position: absolute;
+
+	width: 800px;
+	height: 800px;
+	bottom: -100%;
+	right: -10%;
+
+	border-radius: 651px;
+	background: var(--colors-bg-primary, #DCA63D);
+	filter: blur(275px);
+
+	z-index: -1;
+	pointer-events: none;
+	opacity: 0.6;
+}
+
+/* Druga poświata */
+.footer::after {
+	content: '';
+	position: absolute;
+
+	width: 700px;
+	height: 700px;
+	top: -90%;
+	left: -15%;
+
+	border-radius: 651px;
+	background: var(--colors-bg-primary, #DCA63D);
+	filter: blur(250px);
+
+	z-index: -1;
+	pointer-events: none;
+	opacity: 0.5;
+}
+
 .footer_widget {
 	.menu {
 		line-height: 2.5rem;
@@ -1537,7 +1754,7 @@ article.post:hover {
 
 footer {
 	.__phone::before {
-		content: url('http://odt.local/wp-content/uploads/2026/01/phone.svg');
+		content: url('http://interdecorb2b.local/wp-content/uploads/2026/02/phone.svg');
 		margin-right: 8px;
 		position: relative;
 		top: 8px;
@@ -1546,7 +1763,7 @@ footer {
 	}
 
 	.__mail::before {
-		content: url('http://odt.local/wp-content/uploads/2026/01/mail.svg');
+		content: url('http://interdecorb2b.local/wp-content/uploads/2026/02/mail.svg');
 		margin-right: 8px;
 		position: relative;
 		top: 6px;

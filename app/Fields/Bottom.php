@@ -28,29 +28,25 @@ class Bottom extends Field
 			->setLocation('options_page', '==', 'bottom') // ważne!
 			/*--- FIELDS ---*/
 			->addTab('Treść', ['placement' => 'top'])
-			->addGroup('bottom', ['label' => ''])
+			->addTab('Kafelki', ['placement' => 'top'])
+			->addRepeater('r_bottom', [
+				'label' => 'Kafelki',
+				'layout' => 'table', // 'row', 'block', albo 'table'
+				'min' => 1,
+				'button_label' => 'Dodaj kafelek'
+			])
 			->addImage('image', [
 				'label' => 'Obraz',
 				'return_format' => 'array', // lub 'url', lub 'id'
 				'preview_size' => 'thumbnail',
 			])
-			->addText('txt', ['label' => 'Tekst'])
-			->addText('header', ['label' => 'Nagłówek'])
-			->addText('phone', ['label' => 'Telefon'])
-			->addLink('button', [
-				'label' => 'Przycisk #1',
-				'return_format' => 'array',
+			->addText('title', [
+				'label' => 'Nagłówek',
 			])
-			->addLink('button2', [
-				'label' => 'Przycisk #2',
-				'return_format' => 'array',
+			->addTextarea('text', [
+				'label' => 'Opis',
 			])
-			->addText('shortcode', [
-				'label' => 'Kod formularza',
-				'instructions' => 'Wklej kod formularza:  [contact-form-7 id="f12c470" title="Contact form 1"]',
-				'default_value' => '[contact-form-7 id="f12c470" title="Contact form 1"]',
-			])
-			->endGroup()
+			->endRepeater()
 
 			/*--- USTAWIENIA BLOKU ---*/
 

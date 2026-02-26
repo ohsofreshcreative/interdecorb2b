@@ -42,7 +42,7 @@
 		</main>
 
 		@endif
-
+@include('sections.bottom')
 		@include('sections.footer')
 	</div>
 

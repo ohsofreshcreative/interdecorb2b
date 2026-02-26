@@ -44,13 +44,7 @@ class CtaBg extends Block
 				'preview_size' => 'medium',
 			])
 			->addText('header', ['label' => 'Tytuł'])
-			->addWysiwyg('txt', [
-				'label' => 'Treść',
-				'tabs' => 'all', // 'visual', 'text', 'all'
-				'toolbar' => 'full', // 'basic', 'full'
-				'media_upload' => true,
-				'rows' => 4,
-			])
+			->addText('addon', ['label' => 'Rabat'])
 			->addLink('button', [
 				'label' => 'Przycisk',
 				'return_format' => 'array',

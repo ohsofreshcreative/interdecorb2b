@@ -39,8 +39,8 @@ return;
 				*
 				* @hooked woocommerce_template_single_title - 5
 				* @hooked woocommerce_template_single_rating - 10
-				* @hooked woocommerce_template_single_price - 10
 				* @hooked woocommerce_template_single_excerpt - 20
+				* @hooked woocommerce_template_single_price - 25
 				* @hooked woocommerce_template_single_add_to_cart - 30
 				* @hooked woocommerce_template_single_meta - 40
 				* @hooked woocommerce_template_single_sharing - 50

@@ -12,58 +12,73 @@
     @endif
   </header>
 
-  <section data-gsap-anim="section" class="c-main">
-    <div class="">
-      @php
-        // TO MIEJSCE JEST KLUCZOWE — bez tego toolbar nie ma gdzie się wstrzyknąć
-        do_action('woocommerce_archive_description');
-      @endphp
-
-      @if (woocommerce_product_loop())
+  <div class="c-main">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
+      
+      {{-- Sidebar z filtrami --}}
+      <aside class="lg:col-span-1">
+        <h3 class="text-lg font-semibold mb-4">Kategorie</h3>
         @php
-          do_action('woocommerce_before_shop_loop');
-          
-          // Dodajemy atrybuty do kontenera produktów dla naszego skryptu
-          $load_more_attrs = $GLOBALS['wp_query']->max_num_pages > 1 
-            ? 'data-load-more-container data-max-pages="' . $GLOBALS['wp_query']->max_num_pages . '" data-current-page="1"' 
-            : '';
-            
-          woocommerce_product_loop_start(false);
-          // Dodajemy klasy siatki Tailwind CSS
-          echo '<ul class="products grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 ' . esc_attr( wc_get_loop_prop( 'columns' ) ) . '" ' . $load_more_attrs . '>';
+          $product_categories = get_terms(['taxonomy' => 'product_cat', 'hide_empty' => true]);
         @endphp
+        @if (!is_wp_error($product_categories) && !empty($product_categories))
+          <ul id="product-cat-filters" class="space-y-2">
+            <li>
+              <a href="{{ get_permalink(wc_get_page_id('shop')) }}" data-category="all" class="filter-link active font-bold">Wszystkie</a>
+            </li>
+            @foreach ($product_categories as $category)
+              <li>
+                <a href="{{ get_term_link($category) }}" data-category="{{ $category->slug }}" class="filter-link">{{ $category->name }}</a>
+              </li>
+            @endforeach
+          </ul>
+        @endif
+      </aside>
 
-        @if (wc_get_loop_prop('total'))
-          @while (have_posts())
+   <div 
+        id="ajax-product-archive" 
+        class="lg:col-span-3"
+        data-nonce="{{ wp_create_nonce('product_archive_nonce') }}"
+        data-ajax-url="{{ admin_url('admin-ajax.php') }}"
+        data-current-category="{{ get_query_var('product_cat') ?: 'all' }}"
+      >
+        <section data-gsap-anim="section">
+          <div class="">
             @php
-              the_post();
-              do_action('woocommerce_shop_loop');
-              wc_get_template_part('content', 'product');
+              do_action('woocommerce_archive_description');
             @endphp
-          @endwhile
-        @endif
 
-        @php
-          echo '</ul>';
-          woocommerce_product_loop_end();
-          do_action('woocommerce_after_shop_loop');
-        @endphp
+            @if (woocommerce_product_loop())
+              @php
+                do_action('woocommerce_before_shop_loop');
+                woocommerce_product_loop_start();
+              @endphp
 
-        @if ($GLOBALS['wp_query']->max_num_pages > 1)
-          <div class="flex justify-center mt-8">
-            <button data-load-more-button class="btn btn-primary second-btn">
-              <span data-load-more-text>Pokaż więcej</span>
-              <span data-load-more-spinner class="hidden">Ładowanie...</span>
-            </button>
+              @if (wc_get_loop_prop('total'))
+                @while (have_posts())
+                  @php
+                    the_post();
+                    do_action('woocommerce_shop_loop');
+                    wc_get_template_part('content', 'product');
+                  @endphp
+                @endwhile
+              @endif
+
+              @php
+                woocommerce_product_loop_end();
+                // Przywracamy standardową paginację WooCommerce
+                do_action('woocommerce_after_shop_loop');
+              @endphp
+            @else
+              @php
+                do_action('woocommerce_no_products_found');
+              @endphp
+            @endif
           </div>
-        @endif
-      @else
-        @php
-          do_action('woocommerce_no_products_found');
-        @endphp
-      @endif
+        </section>
+      </div>
     </div>
-  </section>
+  </div>
 
   <!--- DESCRIPTION --->
   @php

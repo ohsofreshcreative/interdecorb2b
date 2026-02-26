@@ -1,85 +1,77 @@
 @php
-$sectionClass = collect([
-    $nomt ? '!mt-0' : '',
-    $background !== 'none' ? $background : '',
-])->filter()->implode(' ');
+  $sectionClass = '';
+  $sectionClass .= !empty($flip) ? ' order-flip' : '';
+  $sectionClass .= !empty($nolist) ? ' no-list' : '';
+  $sectionClass .= !empty($wide) ? ' wide' : '';
+  $sectionClass .= !empty($nomt) ? ' !mt-0' : '';
+  $sectionClass .= !empty($gap) ? ' wider-gap' : '';
 
-$mainContentClass = $flip ? 'lg:order-1' : 'lg:order-2';
-$sidebarClass = $flip ? 'lg:order-2' : 'lg:order-1';
+  if (!empty($background) && $background !== 'none') {
+    $sectionClass .= ' ' . $background;
+  }
+
+  // Pobierz kategorie produktów do sidebara
+  $product_categories = get_terms([
+    'taxonomy'   => 'product_cat',
+    'orderby'    => 'name',
+    'hide_empty' => true,
+  ]);
+
+  // Sprawdź, czy w URL jest kategoria do filtrowania
+  $current_cat_slug = get_query_var('product_cat');
 @endphp
 
-<!--- products --->
-
-<section
-    @if (!empty($section_id)) id="{{ $section_id }}" @endif
-    class="b-products relative -smt {{ $sectionClass }} {{ $section_class }}"
-    data-ajax-url="{{ admin_url('admin-ajax.php') }}"
-    data-nonce="{{ wp_create_nonce('filter_products_nonce') }}"
->
-    <div class="__wrapper c-main relative">
-        
-        @if (!empty($block_title) || !empty($content))
-            <div class="w-full mb-10">
-                @if (!empty($block_title))
-                    <h2 class="m-header">{{ $block_title }}</h2>
-                @endif
-                @if (!empty($content))
-                    <div class="prose max-w-none">
-                        {!! $content !!}
-                    </div>
-                @endif
-            </div>
+<section data-gsap-anim="section" @if(!empty($section_id)) id="{{ $section_id }}" @endif class="b-products relative -smt {{ $sectionClass }} {{ $section_class }}">
+  <div class="__wrapper c-main relative">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
+      
+      {{-- Sidebar z filtrami --}}
+      <aside class="lg:col-span-1">
+        <h3 class="text-lg font-semibold mb-4">Kategorie produktów</h3>
+        @if (!is_wp_error($product_categories) && !empty($product_categories))
+          <ul class="space-y-2">
+            {{-- Link do wszystkich produktów --}}
+            <li>
+              <a href="{{ get_permalink(wc_get_page_id('shop')) }}" class="{{ empty($current_cat_slug) ? 'font-bold' : '' }}">
+                Wszystkie
+              </a>
+            </li>
+            {{-- Lista kategorii --}}
+            @foreach ($product_categories as $category)
+              <li>
+                <a href="{{ get_term_link($category) }}" class="{{ $current_cat_slug == $category->slug ? 'font-bold' : '' }}">
+                  {{ $category->name }}
+                </a>
+              </li>
+            @endforeach
+          </ul>
         @endif
+      </aside>
 
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-12">
+      {{-- Kontener na produkty --}}
+      <div class="lg:col-span-3">
+        @php
+          // Używamy globalnej pętli WordPress, która jest świadoma kontekstu (np. wybranej kategorii)
+          if (woocommerce_product_loop()) {
+            do_action('woocommerce_before_shop_loop');
+            woocommerce_product_loop_start();
 
-            <div id="product-list-container" class="lg:col-span-3 {{ $mainContentClass }}">
-                @if ($product_query->have_posts())
-                    <div>
-                        @php do_action('woocommerce_before_shop_loop'); @endphp
-                    </div>
+            if (wc_get_loop_prop('total')) {
+              while (have_posts()) {
+                the_post();
+                do_action('woocommerce_shop_loop');
+                wc_get_template_part('content', 'product');
+              }
+            }
 
-                    <ul class="products flex flex-col gap-6 mt-6">
-                        @while ($product_query->have_posts()) @php $product_query->the_post() @endphp
-                            @include('woocommerce.content-product')
-                        @endwhile
-                    </ul>
+            woocommerce_product_loop_end();
+            do_action('woocommerce_after_shop_loop');
+          } else {
+            do_action('woocommerce_no_products_found');
+          }
+        @endphp
+      </div>
 
-                    <div class="pagination mt-12">
-                        @php
-                            echo paginate_links([
-                                'base' => str_replace(999999999, '%#%', esc_url(get_pagenum_link(999999999))),
-                                'total' => $product_query->max_num_pages,
-                                'current' => max(1, get_query_var('paged')),
-                                'format' => '?paged=%#%',
-                                'prev_text' => __('&laquo; Poprzednia'),
-                                'next_text' => __('Następna &raquo;'),
-                            ]);
-                        @endphp
-                    </div>
-
-                    @php(wp_reset_postdata())
-                @else
-                    <p>{{ __('No products were found matching your selection.', 'woocommerce') }}</p>
-                @endif
-            </div>
-
-           <aside class="lg:col-span-1 {{ $sidebarClass }}">
-                <h3 class="text-lg font-semibold mb-4">Kategorie produktów</h3>
-                @if (!empty($product_categories))
-                    <ul class="product-categories-filter flex flex-col gap-2">
-                        <li>
-                            <button data-category-id="all" class="category-filter-btn active w-full text-left p-2 rounded hover:bg-gray-100">Wszystkie produkty</button>
-                        </li>
-                        @foreach ($product_categories as $category)
-                            @include('partials.category-filter-item', ['category' => $category])
-                        @endforeach
-                    </ul>
-                @else
-                    <p>Brak kategorii do wyświetlenia.</p>
-                @endif
-            </aside>
-
-        </div>
     </div>
+  </div>
 </section>

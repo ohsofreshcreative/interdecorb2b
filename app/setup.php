@@ -10,51 +10,45 @@ use Illuminate\Support\Facades\Vite;
 
 /**
  * Inject styles into the block editor.
- *
- * @return array
  */
 add_filter('block_editor_settings_all', function ($settings) {
-	$style = Vite::asset('resources/css/editor.css');
+    $style = Vite::asset('resources/css/editor.css');
 
-	$settings['styles'][] = [
-		'css' => "@import url('{$style}')",
-	];
+    $settings['styles'][] = [
+        'css' => "@import url('{$style}')",
+    ];
 
-	return $settings;
+    return $settings;
 });
 
 /**
  * Inject scripts into the block editor.
- *
- * @return void
  */
 add_filter('admin_head', function () {
-	if (! get_current_screen()?->is_block_editor()) {
-		return;
-	}
+    if (! get_current_screen()?->is_block_editor()) {
+        return;
+    }
 
-	$dependencies = json_decode(Vite::content('editor.deps.json'));
+    $dependencies = json_decode(Vite::content('editor.deps.json'));
 
-	foreach ($dependencies as $dependency) {
-		if (! wp_script_is($dependency)) {
-			wp_enqueue_script($dependency);
-		}
-	}
+    foreach ($dependencies as $dependency) {
+        if (! wp_script_is($dependency)) {
+            wp_enqueue_script($dependency);
+        }
+    }
 
-	echo Vite::withEntryPoints([
-		'resources/js/editor.js',
-	])->toHtml();
+    echo Vite::withEntryPoints([
+        'resources/js/editor.js',
+    ])->toHtml();
 });
 
 /**
  * Use the generated theme.json file.
- *
- * @return string
  */
 add_filter('theme_file_path', function ($path, $file) {
-	return $file === 'theme.json'
-		? public_path('build/assets/theme.json')
-		: $path;
+    return $file === 'theme.json'
+        ? public_path('build/assets/theme.json')
+        : $path;
 }, 10, 2);
 
 /**
@@ -62,85 +56,114 @@ add_filter('theme_file_path', function ($path, $file) {
  *
  * @return void
  */
-
 add_action('after_setup_theme', function () {
+    /**
+     * Enable features from Soil when plugin is activated
+     * @link https://roots.io/plugins/soil/
+     */
+    add_theme_support('soil', [
+        'clean-up',
+        'nav-walker',
+        'nice-search',
+        'relative-urls',
+    ]);
 
-	// Dodaj wsparcie dla WooCommerce
-	add_theme_support('woocommerce');
-	add_theme_support('wc-product-gallery-zoom');
-	add_theme_support('wc-product-gallery-lightbox');
-	add_theme_support('wc-product-gallery-slider');
+    /**
+     * Enable features from WooCommerce
+     */
+    add_theme_support('woocommerce');
+    add_theme_support('wc-product-gallery-zoom');
+    add_theme_support('wc-product-gallery-lightbox');
+    add_theme_support('wc-product-gallery-slider');
+    remove_action('woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10);
+    remove_action('woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10);
 
-	
-	/**
-	 * Disable full-site editing support.
-	 *
-	 * @link https://wptavern.com/gutenberg-10-5-embeds-pdfs-adds-verse-block-color-options-and-introduces-new-patterns
-	 */
-	remove_theme_support('block-templates');
+    /**
+     * Disable full-site editing support.
+     * @link https://wptavern.com/gutenberg-10-5-embeds-pdfs-adds-verse-block-color-options-and-introduces-new-patterns
+     */
+    remove_theme_support('block-templates');
 
-	/**
-	 * Register the navigation menus.
-	 *
-	 * @link https://developer.wordpress.org/reference/functions/register_nav_menus/
-	 */
-	register_nav_menus([
-		'primary_navigation' => __('Primary Navigation', 'sage'),
-	]);
+    /**
+     * Register the navigation menus.
+     * @link https://developer.wordpress.org/reference/functions/register_nav_menus/
+     */
+    register_nav_menus([
+        'primary_navigation' => __('Primary Navigation', 'sage'),
+    ]);
 
-	/**
-	 * Disable the default block patterns.
-	 *
-	 * @link https://developer.wordpress.org/block-editor/developers/themes/theme-support/#disabling-the-default-block-patterns
-	 */
-	remove_theme_support('core-block-patterns');
+    /**
+     * Disable the default block patterns.
+     * @link https://developer.wordpress.org/block-editor/developers/themes/theme-support/#disabling-the-default-block-patterns
+     */
+    remove_theme_support('core-block-patterns');
 
-	/**
-	 * Enable plugins to manage the document title.
-	 *
-	 * @link https://developer.wordpress.org/reference/functions/add_theme_support/#title-tag
-	 */
-	add_theme_support('title-tag');
+    /**
+     * Enable plugins to manage the document title.
+     * @link https://developer.wordpress.org/reference/functions/add_theme_support/#title-tag
+     */
+    add_theme_support('title-tag');
 
-	/**
-	 * Enable post thumbnail support.
-	 *
-	 * @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
-	 */
-	add_theme_support('post-thumbnails');
+    /**
+     * Enable post thumbnail support.
+     * @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
+     */
+    add_theme_support('post-thumbnails');
 
-	/**
-	 * Enable responsive embed support.
-	 *
-	 * @link https://developer.wordpress.org/block-editor/how-to-guides/themes/theme-support/#responsive-embedded-content
-	 */
-	add_theme_support('responsive-embeds');
+    /**
+     * Enable responsive embed support.
+     * @link https://developer.wordpress.org/block-editor/how-to-guides/themes/theme-support/#responsive-embedded-content
+     */
+    add_theme_support('responsive-embeds');
 
-	/**
-	 * Enable HTML5 markup support.
-	 *
-	 * @link https://developer.wordpress.org/reference/functions/add_theme_support/#html5
-	 */
-	add_theme_support('html5', [
-		'caption',
-		'comment-form',
-		'comment-list',
-		'gallery',
-		'search-form',
-		'script',
-		'style',
-	]);
+    /**
+     * Enable HTML5 markup support.
+     * @link https://developer.wordpress.org/reference/functions/add_theme_support/#html5
+     */
+    add_theme_support('html5', [
+        'caption',
+        'comment-form',
+        'comment-list',
+        'gallery',
+        'search-form',
+        'script',
+        'style',
+    ]);
 
-	/**
-	 * Enable selective refresh for widgets in customizer.
-	 *
-	 * @link https://developer.wordpress.org/reference/functions/add_theme_support/#customize-selective-refresh-widgets
-	 */
-	add_theme_support('customize-selective-refresh-widgets');
+    /**
+     * Enable selective refresh for widgets in customizer.
+     * @link https://developer.wordpress.org/reference/functions/add_theme_support/#customize-selective-refresh-widgets
+     */
+    add_theme_support('customize-selective-refresh-widgets');
+
+    /**
+     * WooCommerce Shop Page Customizations
+     */
+    add_action( 'woocommerce_before_shop_loop', function() {
+        if ( is_shop() || is_product_category() || is_product_tag() ) {
+            render_product_list_headers();
+        }
+    }, 5);
+
+    remove_action( 'woocommerce_before_shop_loop', 'woocommerce_result_count', 20 );
+    remove_action( 'woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30 );
+
 }, 20);
 
-/*--- WOOCOMMERCE PHP FILES ---*/
+/**
+ * Funkcja renderująca nagłówki listy produktów.
+ * Została wydzielona, aby można było jej używać w handlerze AJAX.
+ */
+function render_product_list_headers() {
+    echo '<ul class="hidden lg:flex items-center py-2 border-b border-gray-200 font-bold text-sm">
+            <li class="flex-grow">Produkt</li>
+            <li class="w-32 text-center flex-shrink-0">Cena</li>
+            <li class="w-32 text-center flex-shrink-0">Dostępność</li>
+            <li class="w-48 text-right flex-shrink-0"></li>
+          </ul>';
+}
 
+/*--- WOOCOMMERCE PHP FILES ---*/
 array_map(function ($file) {
   require_once $file;
 }, array_merge(
@@ -148,72 +171,63 @@ array_map(function ($file) {
   glob(get_theme_file_path('app/Woo/*/*.php')) ?: []
 ));
 
-
 /*--- WOOCOMMERCE SIDEBAR ---*/
-
 add_action('widgets_init', function () {
     register_sidebar([
         'name'          => __('Sklep - Filtry', 'sage'),
         'id'            => 'sidebar-shop',
         'before_widget' => '<section class="widget %1$s %2$s">',
         'after_widget'  => '</section>',
-        'before_title'  => '<h5 class="widget-title font-bold mb-4">',
-        'after_title'   => '</h5>',
+        'before_title'  => '<h6 class="widget-title font-bold mb-4">',
+        'after_title'   => '</h6>',
     ]);
 });
 
 /**
  * Register the theme sidebars.
- *
- * @return void
  */
 add_action('widgets_init', function () {
-	$defaultConfig = [
-		'before_widget' => '<section class="footer_widget widget %1$s %2$s">',
-		'after_widget' => '</section>',
-		'before_title' => '<h5 class="widget-title text-h5 primary mb-4 flex">',
-		'after_title' => '</h5>',
-	];
+    $defaultConfig = [
+        'before_widget' => '<section class="footer_widget widget %1$s %2$s">',
+        'after_widget' => '</section>',
+        'before_title' => '<h6 class="widget-title text-h6 text-white mb-4 flex">',
+        'after_title' => '</h6>',
+    ];
 
-	register_sidebar([
-		'name' => __('Primary', 'sage'),
-		'id' => 'sidebar-primary',
-	] + $defaultConfig);
+    register_sidebar([
+        'name' => __('Primary', 'sage'),
+        'id' => 'sidebar-primary',
+    ] + $defaultConfig);
 
-	register_sidebar([
-		'name' => __('Footer 1', 'sage'),
-		'id'   => 'sidebar-footer-1',
-	] + $defaultConfig);
+    register_sidebar([
+        'name' => __('Footer 1', 'sage'),
+        'id'   => 'sidebar-footer-1',
+    ] + $defaultConfig);
 
-	register_sidebar([
-		'name' => __('Footer 2', 'sage'),
-		'id'   => 'sidebar-footer-2',
-	] + $defaultConfig);
+    register_sidebar([
+        'name' => __('Footer 2', 'sage'),
+        'id'   => 'sidebar-footer-2',
+    ] + $defaultConfig);
 
-	register_sidebar([
-		'name' => __('Footer 3', 'sage'),
-		'id'   => 'sidebar-footer-3',
-	] + $defaultConfig);
+    register_sidebar([
+        'name' => __('Footer 3', 'sage'),
+        'id'   => 'sidebar-footer-3',
+    ] + $defaultConfig);
 
-	register_sidebar([
-		'name' => __('Footer 4', 'sage'),
-		'id'   => 'sidebar-footer-4',
-	] + $defaultConfig);
+    register_sidebar([
+        'name' => __('Footer 4', 'sage'),
+        'id'   => 'sidebar-footer-4',
+    ] + $defaultConfig);
 });
 
-
 /*--- CATEGORY IMAGE ---*/
-
-/**
- * Register the ACF fields for Category taxonomy.
- */
 add_action('acf/init', function () {
-	if (function_exists('acf_add_local_field_group')) {
-		acf_add_local_field_group([
-			'key' => 'group_category_settings',
-			'title' => 'Ustawienia Kategorii',
-			'fields' => [
-				[
+    if (function_exists('acf_add_local_field_group')) {
+        acf_add_local_field_group([
+            'key' => 'group_category_settings',
+            'title' => 'Ustawienia Kategorii',
+            'fields' => [
+                [
                     'key' => 'field_category_header',
                     'label' => 'Nagłówek',
                     'name' => 'category_header',
@@ -233,28 +247,28 @@ add_action('acf/init', function () {
                     'name' => 'category_image',
                     'type' => 'image',
                     'instructions' => 'Dodaj obrazek, który będzie wyświetlany jako tło lub nagłówek dla tej kategorii.',
-                    'return_format' => 'array', // Zwraca tablicę z danymi obrazka (url, alt, etc.)
+                    'return_format' => 'array',
                     'preview_size' => 'medium',
                     'library' => 'all',
                 ],
-			],
-			'location' => [
-				[
-					[
-						'param' => 'taxonomy',
-						'operator' => '==',
-						'value' => 'category', // Celujemy w taksonomię "category"
-					],
-				],
-			],
-			'menu_order' => 0,
-			'position' => 'normal',
-			'style' => 'default',
-			'label_placement' => 'top',
-			'instruction_placement' => 'label',
-			'active' => true,
-		]);
-	}
+            ],
+            'location' => [
+                [
+                    [
+                        'param' => 'taxonomy',
+                        'operator' => '==',
+                        'value' => 'category',
+                    ],
+                ],
+            ],
+            'menu_order' => 0,
+            'position' => 'normal',
+            'style' => 'default',
+            'label_placement' => 'top',
+            'instruction_placement' => 'label',
+            'active' => true,
+        ]);
+    }
 });
 
 /**
@@ -277,38 +291,10 @@ add_filter('get_the_archive_title', function ($title) {
 });
 
 /*--- GSAP ---*/
-
 add_action('wp_enqueue_scripts', function () {
-	/**
-	 * Rejestracja i ładowanie skryptów.
-	 */
-
-	// Ładuj GSAP i ScrollTrigger z CDN.
-	// Trzeci argument (tablica []) oznacza brak zależności.
-	// Piąty argument (true) umieszcza skrypty w stopce.
-	wp_enqueue_script('gsap-cdn', 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js', [], null, true);
-
-	// Ustawiamy zależność 'gsap-st-cdn' od 'gsap-cdn', aby załadowały się w dobrej kolejności.
-	wp_enqueue_script('gsap-st-cdn', 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js', ['gsap-cdn'], null, true);
-}, 1); // Ustawiamy priorytet na 1, aby wykonało się BARDZO wcześnie.
-
-
-add_action('after_setup_theme', function () {
-    remove_action('woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10);
-    remove_action('woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10);
-});
-
-
-
-
-/**
- * Dynamically generate checkboxes for subsidies in Contact Form 7.
- */
-add_action('after_setup_theme', function () {
-    remove_action('woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10);
-    remove_action('woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10);
-});
-
+    wp_enqueue_script('gsap-cdn', 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js', [], null, true);
+    wp_enqueue_script('gsap-st-cdn', 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js', ['gsap-cdn'], null, true);
+}, 1);
 
 /**
  * Register custom form tag for CF7 to display subsidies.
@@ -319,9 +305,6 @@ add_action('wpcf7_init', function () {
 
 /**
  * Handler for the [subsidy_checkboxes] form tag.
- *
- * @param WPCF7_FormTag $tag
- * @return string
  */
 function custom_subsidy_checkboxes_handler($tag)
 {
@@ -347,51 +330,37 @@ function custom_subsidy_checkboxes_handler($tag)
     return $output;
 }
 
-
 /**
  * Disable Contact Form 7 auto <p> tags.
  */
 add_filter('wpcf7_autop_or_not', '__return_false');
 
 /*--- WYSIWYG HEIGHT FIX ---*/
-
 add_action('admin_footer', function () {
   $screen = function_exists('get_current_screen') ? get_current_screen() : null;
   if (!$screen || $screen->base !== 'post') return;
   ?>
   <script>
     (function () {
-      const TARGET_HEIGHT = 140; // startowa wysokość
-
+      const TARGET_HEIGHT = 140;
       function applyInitialHeight() {
         document.querySelectorAll('.acf-editor-wrap iframe[id^="acf-editor-"]').forEach((iframe) => {
-          // Jeśli już ustawiliśmy startową wysokość, nie ruszaj więcej (żeby ręczny resize działał)
           if (iframe.dataset.acfInitialHeightApplied === '1') return;
-
           const current = parseInt(iframe.style.height || 0, 10);
-
-          // Ustaw tylko jeśli jest puste albo większe od targetu (czyli "za wysokie")
           if (!current || current > TARGET_HEIGHT) {
             iframe.style.height = TARGET_HEIGHT + 'px';
           }
-
           iframe.dataset.acfInitialHeightApplied = '1';
         });
       }
-
-      // Spróbuj kilka razy po załadowaniu (ACF/TinyMCE potrafią wstać później)
       let tries = 0;
       const timer = setInterval(() => {
         applyInitialHeight();
         tries++;
-        if (tries >= 40) clearInterval(timer); // ~10s
+        if (tries >= 40) clearInterval(timer);
       }, 250);
-
-      // Obserwuj DOM tylko po to, żeby łapać NOWE edytory (np. po dodaniu bloku),
-      // ale nie resetować tych, które użytkownik już rozciągnął.
       const obs = new MutationObserver(() => applyInitialHeight());
       obs.observe(document.body, { childList: true, subtree: true });
-
       window.addEventListener('load', () => setTimeout(applyInitialHeight, 500));
     })();
   </script>
@@ -399,22 +368,13 @@ add_action('admin_footer', function () {
 });
 
 /*--- REDIRECT TAXONOMY TO PAGE ---*/
-
 add_action('template_redirect', function () {
-    // Sprawdź, czy jesteśmy na stronie archiwum JAKIEJKOLWIEK taksonomii
     if (!is_tax() && !is_category() && !is_tag()) {
-        return; // Jeśli nie, zakończ działanie
+        return;
     }
-
-    // Pobierz obiekt aktualnej taksonomii (kategorii, tagu itp.)
     $term = get_queried_object();
-
-    // Upewnij się, że obiekt istnieje i jest terminem taksonomii
     if ($term instanceof \WP_Term) {
-        // Pobierz wartość pola 'linked_page' dla tego konkretnego terminu
         $redirect_url = get_field('linked_page', $term);
-
-        // Jeśli wybrano stronę, przekieruj
         if ($redirect_url) {
             wp_safe_redirect($redirect_url, 301);
             exit;
@@ -422,139 +382,125 @@ add_action('template_redirect', function () {
     }
 });
 
-// CUSTOM POST TYPE BRANŻE
-	/* 	add_action('init', function () {
-			register_post_type('offer', [
-				'label' => 'Oferta',
-				'public' => true,
-				'has_archive' => false,
-				'rewrite' => ['slug' => 'offer'],
-				'supports' => ['title', 'editor', 'thumbnail', 'excerpt'],
-				'show_in_rest' => true,
-				'taxonomies' => ['category'],
-				'menu_icon' => 'dashicons-list-view',
-			]);
-		}); */
-
-	/* 	// CUSTOM POST TYPE POMAGAMY W 
-		add_action('init', function () {
-			register_post_type('help', [
-				'label' => 'Pomagamy w',
-				'public' => true,
-				'has_archive' => false,
-				'rewrite' => ['slug' => 'help'],
-				'supports' => ['title', 'editor', 'thumbnail', 'excerpt'],
-				'show_in_rest' => true,
-				'taxonomies' => ['category'],
-				'menu_icon' => 'dashicons-open-folder',
-			]);
-		}); */
-
-	/* 	add_action('init', function () {
-			// 1. NAJPIERW REJESTRUJEMY NOWĄ, NIESTANDARDOWĄ TAKSONOMIĘ
-			register_taxonomy('team_category', ['team'], [
-				'label' => 'Kategorie Zespołu', // Nazwa ogólna
-				'labels' => [
-					'name'              => 'Kategorie Zespołu',
-					'singular_name'     => 'Kategoria Zespołu',
-					'search_items'      => 'Szukaj w kategoriach',
-					'all_items'         => 'Wszystkie kategorie',
-					'parent_item'       => 'Kategoria nadrzędna',
-					'parent_item_colon' => 'Kategoria nadrzędna:',
-					'edit_item'         => 'Edytuj kategorię',
-					'update_item'       => 'Aktualizuj kategorię',
-					'add_new_item'      => 'Dodaj nową kategorię',
-					'new_item_name'     => 'Nazwa nowej kategorii',
-					'menu_name'         => 'Kategorie',
-				],
-				'public'            => true,
-				'hierarchical'      => true, // Ustawiamy na true, aby działały jak kategorie (drzewko), a nie tagi
-				'show_ui'           => true,
-				'show_in_menu'      => true, // Pokaże się jako podmenu pod "Zespół"
-				'show_admin_column' => true,
-				'query_var'         => true,
-				'show_in_rest'      => true, // Ważne dla edytora blokowego
-				'rewrite'           => ['slug' => 'zespol-kategoria'], // Slug dla archiwów tej taksonomii
-			]);
-
-			// 2. REJESTRUJEMY CUSTOM POST TYPE I PRZYPISUJEMY DO NIEGO NOWĄ TAKSONOMIĘ
-			register_post_type('team', [
-				'label' => 'Zespół',
-				'public' => true,
-				'has_archive' => false,
-				'rewrite' => ['slug' => 'team'],
-				'supports' => ['title', 'editor', 'thumbnail', 'excerpt'],
-				'show_in_rest' => true,
-				// Tutaj jest kluczowa zmiana: używamy naszej nowej taksonomii 'team_category'
-				'taxonomies' => ['team_category'],
-				'menu_icon' => 'dashicons-admin-users',
-			]);
-		}); */
-
-
-		/**
- * Obsługa zapytań AJAX do filtrowania produktów.
- * WERSJA Z DEBUGOWANIEM WEWNĄTRZ KODU.
+/**
+ * Rejestracja endpointu AJAX do filtrowania archiwum produktów.
  */
-function filter_products_by_category() {
-    try {
-        if (!check_ajax_referer('filter_products_nonce', 'security', false)) {
-            wp_send_json_error('Invalid nonce', 403);
-            die();
-        }
+add_action('wp_ajax_filter_product_archive', 'App\\filter_product_archive_handler');
+add_action('wp_ajax_nopriv_filter_product_archive', 'App\\filter_product_archive_handler');
 
-        $category_id = isset($_POST['category_id']) ? sanitize_text_field($_POST['category_id']) : 'all';
-        $paged = isset($_POST['paged']) ? intval($_POST['paged']) : 1;
-        $posts_per_page = 10;
-
-        $args = [
-            'post_type' => 'product',
-            'posts_per_page' => $posts_per_page,
-            'paged' => $paged,
-            'post_status' => 'publish',
-        ];
-
-        if ($category_id !== 'all' && is_numeric($category_id)) {
-            $args['tax_query'] = [
-                [
-                    'taxonomy' => 'product_cat',
-                    'field' => 'term_id',
-                    'terms' => (int)$category_id,
-                ],
-            ];
-        }
-
-       $product_query = new \WP_Query($args);
-        $html_output = '';
-
-        if ($product_query->have_posts()) {
-            $html_output .= '<ul class="products flex flex-col gap-6 mt-6">';
-            while ($product_query->have_posts()) {
-                $product_query->the_post();
-                $product = wc_get_product(get_the_ID());
-                if (!$product) continue;
-
-                $html_output .= \Roots\view('woocommerce.content-product', ['product' => $product])->render();
-            }
-            $html_output .= '</ul>';
-            // ... (reszta kodu pętli i paginacji)
-        } else {
-            $html_output = '<p class="woocommerce-info">' . __('No products were found matching your selection.', 'woocommerce') . '</p>';
-        }
-        
-        wp_reset_postdata();
-        wp_send_json_success(['html' => $html_output]);
-
-    } catch (Throwable $e) {
-        // JEŚLI WYSTĄPI BŁĄD KRYTYCZNY, ZŁAPIEMY GO TUTAJ
-        // i wyślemy jako odpowiedź JSON, zamiast powodować błąd 500.
-        wp_send_json_error([
-            'message' => $e->getMessage(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-        ]);
+/**
+ * Handler dla filtrowania archiwum produktów.
+ */
+function filter_product_archive_handler() {
+    if (!check_ajax_referer('product_archive_nonce', 'nonce', false)) {
+        wp_send_json_error('Błąd weryfikacji.', 401);
+        return;
     }
+
+    $category_slug = isset($_POST['category']) ? sanitize_text_field($_POST['category']) : 'all';
+    $paged = isset($_POST['page']) ? absint($_POST['page']) : 1;
+
+    $args = [
+        'post_type'      => 'product',
+        'posts_per_page' => wc_get_default_products_per_row() * wc_get_default_product_rows_per_page(),
+        'paged'          => $paged,
+    ];
+
+    if ($category_slug !== 'all') {
+        $args['tax_query'] = [
+            [
+                'taxonomy' => 'product_cat',
+                'field'    => 'slug',
+                'terms'    => $category_slug,
+            ],
+        ];
+    }
+
+    $products_query = new \WP_Query($args);
+
+    ob_start();
+
+    if ($products_query->have_posts()) {
+        echo '<section data-gsap-anim="section"><div class="">';
+        
+        // Toolbar sortowania - pozostawiamy, może być potrzebny
+        do_action('woocommerce_before_shop_loop');
+        
+        woocommerce_product_loop_start();
+
+        while ($products_query->have_posts()) {
+            $products_query->the_post();
+            wc_get_template_part('content', 'product');
+        }
+
+        woocommerce_product_loop_end();
+
+        // --- POCZĄTEK ZMIANY ---
+        // Ręczne generowanie paginacji zamiast do_action()
+        $total_pages = $products_query->max_num_pages;
+
+        if ($total_pages > 1) {
+            $pagination_args = [
+                // Zmieniamy 'base' i 'format', aby używać ?paged=
+                'base'      => add_query_arg('paged', '%#%'),
+                'format'    => '',
+                'current'   => $paged,
+                'total'     => $total_pages,
+                'prev_text' => __('&laquo;'),
+                'next_text' => __('&raquo;'),
+                'type'      => 'list',
+            ];
+            
+            echo '<nav class="woocommerce-pagination">';
+            echo paginate_links($pagination_args);
+            echo '</nav>';
+        }
+        // --- KONIEC ZMIANY ---
+        
+        echo '</div></section>';
+    } else {
+        do_action('woocommerce_no_products_found');
+    }
+
+    // Przywracamy oryginalne globalne zapytanie
+    wp_reset_postdata(); // Używamy wp_reset_postdata, ponieważ nie zmienialiśmy globalnego $wp_query
+
+    $html = ob_get_clean();
+    wp_send_json_success(['html' => $html]);
 }
 
-add_action('wp_ajax_filter_products', __NAMESPACE__ . '\\filter_products_by_category');
-add_action('wp_ajax_nopriv_filter_products', __NAMESPACE__ . '\\filter_products_by_category');
+/*--- WOOCOMMERCE HOOKS ---*/
+
+add_action( 'init', function () {
+
+    // Zdejmij cenę z domyślnego miejsca (priorytet 10)
+    remove_action(
+        'woocommerce_single_product_summary',
+        'woocommerce_template_single_price',
+        10
+    );
+
+    // Usuń domyślny przycisk z woocommerce_single_variation — mamy własny w variable.php
+    remove_action(
+        'woocommerce_single_variation',
+        'woocommerce_single_variation_add_to_cart_button',
+        20
+    );
+
+    // Usuń meta (SKU, kategorie, tagi)
+    remove_action(
+        'woocommerce_single_product_summary',
+        'woocommerce_template_single_meta',
+        40
+    );
+
+} );
+
+// Cena dla SIMPLE — przed add to cart (30)
+add_action( 'woocommerce_single_product_summary', function () {
+    global $product;
+    if ( ! $product || $product->is_type( 'variable' ) ) {
+        return;
+    }
+    woocommerce_template_single_price();
+}, 25 );
