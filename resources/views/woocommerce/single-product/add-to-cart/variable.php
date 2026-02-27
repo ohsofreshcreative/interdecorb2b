@@ -16,28 +16,30 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
         <p class="stock out-of-stock"><?php echo esc_html( apply_filters( 'woocommerce_out_of_stock_message', __( 'This product is currently out of stock and unavailable.', 'woocommerce' ) ) ); ?></p>
     <?php else : ?>
 
-        <?php /* 1. WARIANTY (selecty) */ ?>
-        <table class="variations" cellspacing="0" role="presentation">
-            <tbody>
-                <?php foreach ( $attributes as $attribute_name => $options ) : ?>
-                    <tr>
-                        <th class="label"><label for="<?php echo esc_attr( sanitize_title( $attribute_name ) ); ?>"><?php echo wc_attribute_label( $attribute_name ); ?></label></th>
-                        <td class="value">
-                            <?php
-                                wc_dropdown_variation_attribute_options(
-                                    array(
-                                        'options'   => $options,
-                                        'attribute' => $attribute_name,
-                                        'product'   => $product,
-                                    )
-                                );
-                                echo end( $attribute_keys ) === $attribute_name ? wp_kses_post( apply_filters( 'woocommerce_reset_variations_link', '<a class="reset_variations" href="#" aria-label="' . esc_attr__( 'Clear options', 'woocommerce' ) . '">' . esc_html__( 'Clear', 'woocommerce' ) . '</a>' ) ) : '';
-                            ?>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <div class="border-t border-dashed border-primary pt-6 mt-6">
+			<?php /* 1. WARIANTY (selecty) */ ?>
+			<table class="variations" cellspacing="0" role="presentation">
+				<tbody>
+					<?php foreach ( $attributes as $attribute_name => $options ) : ?>
+						<tr class="flex flex-col items-start">
+							<th class="label"><label for="<?php echo esc_attr( sanitize_title( $attribute_name ) ); ?>"><?php echo wc_attribute_label( $attribute_name ); ?></label></th>
+							<td class="__variation-values value w-full">
+								<?php
+									wc_dropdown_variation_attribute_options(
+										array(
+											'options'   => $options,
+											'attribute' => $attribute_name,
+											'product'   => $product,
+										)
+									);
+							  /*       echo end( $attribute_keys ) === $attribute_name ? wp_kses_post( apply_filters( 'woocommerce_reset_variations_link', '<a class="reset_variations" href="#" aria-label="' . esc_attr__( 'Clear options', 'woocommerce' ) . '">' . esc_html__( 'Clear', 'woocommerce' ) . '</a>' ) ) : ''; */
+								?>
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
         <div class="reset_variations_alert screen-reader-text" role="alert" aria-live="polite" aria-relevant="all"></div>
         <?php do_action( 'woocommerce_after_variations_table' ); ?>
 
