@@ -36,21 +36,24 @@ if (! $product || ! is_a($product, 'WC_Product')) {
 
 <div class="woocommerce-product-details__short-description">
 	<?php echo $short_description; ?>
+<!-- 
 
-
-	<?php if ($product) : ?>
-		<div class="__stock">
-			<?php
-			$status = $product->get_stock_status();
-
-			if ($status === 'instock') {
-				echo '<p class="stock in-stock">W magazynie</p>';
-			} elseif ($status === 'outofstock') {
-				echo '<p class="stock out-of-stock">Brak w magazynie</p>';
-			} else {
-				echo '<p class="stock available-on-backorder">Na zamówienie</p>';
-			}
-			?>
-		</div>
-	<?php endif; ?>
+	<div class="__info flex flex-col border-t border-primary border-dashed pt-8 mt-4">
+		<div class="__shipping flex items-center">Wysyłka w 24–48 h </div>
+		<div class="__payment flex items-center">Dostępne płatności na podstawie faktury</div>
+		<?php if ($product) : ?>
+			<div class="__stock flex items-center">
+				<?php
+				$status = $product->get_stock_status();
+				if ($status === 'instock') {
+					echo '<p class="stock in-stock">W magazynie</p>';
+				} elseif ($status === 'outofstock') {
+					echo '<p class="stock out-of-stock">Brak w magazynie</p>';
+				} else {
+					echo '<p class="stock available-on-backorder">Na zamówienie</p>';
+				}
+				?>
+			</div>
+		<?php endif; ?>
+	</div> -->
 </div>

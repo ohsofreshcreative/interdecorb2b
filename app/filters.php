@@ -103,3 +103,41 @@ add_filter('woocommerce_add_to_cart_fragments', function($fragments) {
     $fragments['.cart-count'] = ob_get_clean();
     return $fragments;
 });
+
+/*--- CHANGE DEFAULT WOOCOMMERCE TABS ---*/
+
+add_filter('woocommerce_product_tabs', function ($tabs) {
+  if (!empty($tabs['additional_information']['title'])) {
+    $tabs['additional_information']['title'] = __('Specyfikacja produktu', 'twoj-textdomain');
+  }
+  return $tabs;
+}, 98);
+
+
+add_action('woocommerce_after_add_to_cart_form', function () {
+  global $product;
+
+  if (!$product instanceof \WC_Product) {
+    return;
+  }
+  ?>
+  <div class="__info flex flex-col border-t border-primary border-dashed pt-8 mt-4">
+    <div class="__stock flex items-center">
+      <?php
+      $status = $product->get_stock_status();
+
+      if ($status === 'instock') {
+        echo '<p class="stock in-stock">W magazynie</p>';
+      } elseif ($status === 'outofstock') {
+        echo '<p class="stock out-of-stock">Brak w magazynie</p>';
+      } else {
+        echo '<p class="stock available-on-backorder">Na zamówienie</p>';
+      }
+      ?>
+    </div>
+    <div class="__shipping flex items-center">Wysyłka w 24–48 h </div>
+    <div class="__payment flex items-center">Dostępne płatności na podstawie faktury</div>
+
+  </div>
+  <?php
+});

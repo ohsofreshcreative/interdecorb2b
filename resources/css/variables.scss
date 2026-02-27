@@ -1586,25 +1586,47 @@ article.post:hover {
 		}
 	}
 
-	.woocommerce-product-details__short-description {
-		.__stock {
-			display: inline-flex;
-			align-items: center;
-			height: max-content;
+	.__stock {
+		display: inline-flex;
+		align-items: center;
+		height: max-content;
+		color: var(--color-secondary) !important;
+
+		p {
+
+			font-size: 16px !important;
+		}
+
+		.stock.in-stock {
+			color: var(--color-red-600) !important;
+		}
+
+		.stock.out-of-stock {}
+
+		.stock.available-on-backorder {
 			color: var(--color-secondary) !important;
 
-			.stock.in-stock {
-				color: var(--color-secondary) !important;
-
-			}
-
-			.stock.out-of-stock {}
-
-			.stock.available-on-backorder {
-				color: var(--color-secondary) !important;
-
-			}
 		}
+	}
+
+	.__shipping::before {
+		content: url('http://interdecorb2b.local/wp-content/uploads/2026/02/delivery.svg');
+		margin-right: 8px;
+		position: relative;
+		top: 4px;
+		width: 32px;
+		width: 32px;
+		transition: all 0.2s ease-out;
+	}
+
+	.__payment::before {
+		content: url('http://interdecorb2b.local/wp-content/uploads/2026/02/fv.svg');
+		margin-right: 8px;
+		position: relative;
+		top: 4px;
+		width: 32px;
+		width: 32px;
+		transition: all 0.2s ease-out;
 	}
 
 	.__stock::before {
@@ -1616,6 +1638,16 @@ article.post:hover {
 		width: 32px;
 		transition: all 0.2s ease-out;
 
+	}
+
+	.woocommerce-tabs {
+		li:hover {
+			background-color: var(--color-primary-light);
+		}
+
+		li.active {
+			background-color: #FFF;
+		}
 	}
 }
 

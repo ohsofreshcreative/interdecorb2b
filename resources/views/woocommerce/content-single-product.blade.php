@@ -18,9 +18,9 @@ return;
 @endphp
 @endif
 
-<section data-gsap-anim="section" class="c-main">
+<section data-gsap-anim="section" class="">
 	<div>
-		<div data-gsap-element="header" id="product-{{ get_the_ID() }}" @php wc_product_class('grid grid-cols-1 md:grid-cols-2 gap-10', $product) @endphp>
+		<div data-gsap-element="header" id="product-{{ get_the_ID() }}" @php wc_product_class('c-main grid grid-cols-1 md:grid-cols-2 gap-10', $product) @endphp>
 			<div>
 				@php
 				/**
@@ -48,8 +48,14 @@ return;
 				*/
 				do_action('woocommerce_single_product_summary');
 				@endphp
+				
 			</div>
+			
 		</div>
+
+
+
+
 
 		<div data-gsap-element="cta">
 			@php
