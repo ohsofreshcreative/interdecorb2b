@@ -40,7 +40,7 @@ class Contact extends Block
 				'multi_expand' => true,
 			])
 			/*--- TAB #1 ---*/
-			->addTab('Dane', ['placement' => 'top'])
+			->addTab('Dane kontaktowe', ['placement' => 'top'])
 			->addGroup('g_contact_1', ['label' => ''])
 			->addText('header', ['label' => 'Tytuł'])
 			->addWysiwyg('txt', [
@@ -49,6 +49,8 @@ class Contact extends Block
 				'toolbar' => 'full',
 				'media_upload' => true,
 			])
+			->addText('phone', ['label' => 'Telefon'])
+			->addText('mail', ['label' => 'Email'])
 			->addImage('image', [
 				'label' => 'Obraz',
 				'return_format' => 'array',
@@ -56,9 +58,31 @@ class Contact extends Block
 			])
 			->endGroup()
 			/*--- TAB #2 ---*/
-			->addTab('Formularz', ['placement' => 'top'])
+			->addTab('Dane firmy', ['placement' => 'top'])
 			->addGroup('g_contact_2', ['label' => ''])
-			->addText('title', ['label' => 'Tytuł'])
+			->addText('header', ['label' => 'Tytuł'])
+			->addTextarea('address', [
+				'label' => 'Adres',
+				'rows' => 2,
+				'new_lines' => 'br',
+			])
+			->addText('phone', ['label' => 'Telefon'])
+			->addText('mail', ['label' => 'Email'])
+			->addTextarea('data', [
+				'label' => 'Dane firmowe',
+				'rows' => 3,
+				'new_lines' => 'br',
+			])
+			->endGroup()
+			/*--- TAB #3 ---*/
+			->addTab('Formularz', ['placement' => 'top'])
+			->addGroup('g_contact_3', ['label' => ''])
+			->addText('header', ['label' => 'Tytuł'])
+			->addTextarea('txt', [
+				'label' => 'Opis',
+				'rows' => 2,
+				'new_lines' => 'br',
+			])
 			->addText('shortcode', [
 				'label' => 'Kod formularza',
 				'instructions' => 'Wklej kod formularza:  [contact-form-7 id="f12c470" title="Contact form 1"]',
@@ -85,6 +109,7 @@ class Contact extends Block
 		return [
 			'g_contact_1' => get_field('g_contact_1'),
 			'g_contact_2' => get_field('g_contact_2'),
+			'g_contact_3' => get_field('g_contact_3'),
 			'tiles' => get_field('tiles'),
 			'flip' => get_field('flip'),
 			'lightbg' => get_field('lightbg'),

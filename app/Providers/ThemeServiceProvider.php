@@ -46,14 +46,6 @@ class ThemeServiceProvider extends SageServiceProvider
 					'redirect'   => false,
 				]);
 
-				acf_add_options_page([
-					'page_title' => 'Gabinety - Stopka',
-					'menu_title' => 'Gabinety - Stopka',
-					'menu_slug'  => 'places-footer',
-					'capability' => 'edit_posts',
-					'redirect'   => false,
-				]);
-
 				/* 	acf_add_options_page([
 					'page_title' => 'Oferta',
 					'menu_title' => 'Oferta',

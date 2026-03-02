@@ -141,3 +141,17 @@ add_action('woocommerce_after_add_to_cart_form', function () {
   </div>
   <?php
 });
+
+/**
+ * Zmiana kolejności kolumn na stronie "Moje konto -> Zamówienia".
+ */
+add_filter( 'woocommerce_account_orders_columns', function ( $columns ) {
+    $new_columns = array();
+    $new_columns['order-number']  = __( 'Order', 'woocommerce' );
+    $new_columns['order-date']    = __( 'Date', 'woocommerce' );
+    $new_columns['order-total']   = __( 'Total', 'woocommerce' );
+    $new_columns['order-status']  = __( 'Status', 'woocommerce' );
+    $new_columns['order-actions'] = __( 'Actions', 'woocommerce' );
+
+    return $new_columns;
+});

@@ -27,7 +27,6 @@ import './blocks/works.js';
 import './blocks/category-posts.js';
 import './blocks/how.js';
 import './blocks/overlap.js';
-import './blocks/calc.js';
 import './blocks/category-slider.js';
 
 /*--- INICJALIZACJA BIBLIOTEK ---*/

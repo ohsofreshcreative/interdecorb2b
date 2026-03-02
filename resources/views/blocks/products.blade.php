@@ -26,8 +26,8 @@
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
       
       {{-- Sidebar z filtrami --}}
-      <aside class="lg:col-span-1">
-        <h3 class="text-lg font-semibold mb-4">Kategorie produktów</h3>
+      <aside class="bg-white border border-dashed border-primary rounded-3xl lg:col-span-1 h-max p-10">
+        <h5 class="text-lg text-primary font-semibold mb-4">Kategorie</h5>
         @if (!is_wp_error($product_categories) && !empty($product_categories))
           <ul class="space-y-2">
             {{-- Link do wszystkich produktów --}}
