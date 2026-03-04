@@ -68,8 +68,15 @@ const archiveFilter = {
           if(newContainer) {
             newContainer.dataset.currentCategory = category;
           }
-          this.container.scrollIntoView({ behavior: 'smooth' });
-        } else {
+          const headerOffset = 120; // Wysokość Twojego paska menu w pikselach
+          const elementPosition = this.container.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        } else  {
           this.container.innerHTML = '<p>Wystąpił błąd.</p>';
         }
         this.container.style.opacity = '1';

@@ -4,6 +4,11 @@
 @section('content')
   @php
     do_action('get_header', 'shop');
+    woocommerce_breadcrumb();
+    do_action('woocommerce_before_main_content');
+  @endphp
+  @php
+    do_action('get_header', 'shop');
     do_action('woocommerce_before_main_content');
   @endphp
 

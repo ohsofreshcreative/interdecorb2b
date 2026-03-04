@@ -21,7 +21,7 @@ $sectionClass .= $nomt ? ' !mt-0' : '';
             </h6>
 			@if (!empty($g_hero['button1']))
 			<div class="inline-buttons m-btn">
-				<a data-gsap-element="button" class="second-btn left-btn"
+				<a data-gsap-element="button" class="main-btn left-btn"
 					href="{{ $g_hero['button1']['url'] }}"
 					target="{{ $g_hero['button1']['target'] }}">
 					{{ $g_hero['button1']['title'] }}

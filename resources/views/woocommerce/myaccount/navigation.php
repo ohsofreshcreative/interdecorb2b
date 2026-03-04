@@ -46,6 +46,7 @@ do_action('woocommerce_before_account_navigation');
             'downloads'       => 'materialy.svg', 
             'opiekun'         => 'kontakt.svg', 
             'pomoc'           => 'pomoc.svg', 
+            'reorder'           => 'zamow.svg', 
             'customer-logout' => 'logout.svg',
         ];
 

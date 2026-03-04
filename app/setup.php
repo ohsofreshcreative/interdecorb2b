@@ -171,6 +171,12 @@ array_map(function ($file) {
   glob(get_theme_file_path('app/Woo/*/*.php')) ?: []
 ));
 
+
+
+// Dodaj tę linię, aby wczytać Twój plik
+require_once __DIR__ . '/woocommerce.php';
+
+
 /*--- WOOCOMMERCE SIDEBAR ---*/
 add_action('widgets_init', function () {
     register_sidebar([
